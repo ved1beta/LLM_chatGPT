@@ -218,6 +218,25 @@ for iter in range(max_iters):
     loss.backward()
     optimizer.step()
 
+# After training loop, add this code to save the model
+print('Saving model...')
+torch.save({
+    'model_state_dict': model.state_dict(),
+    'vocab': {
+        'stoi': stoi,
+        'itos': itos,
+        'vocab_size': vocab_size,
+    },
+    'config': {
+        'n_embd': n_embd,
+        'n_head': n_head,
+        'n_layer': n_layer,
+        'block_size': block_size,
+        'dropout': dropout,
+    }
+}, 'gpt_model.pkl')
+print('Model saved successfully!')
+
 # generate from the model
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
 print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
